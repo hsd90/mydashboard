@@ -1,0 +1,53 @@
+<!-- dashboard/templates/dashboard/organizational_info.html -->
+{% extends 'dashboard/base.html' %}
+{% block title %}برندبوک و اطلاعات سازمانی{% endblock %}
+
+{% block content %}
+<h1>برندبوک و اطلاعات سازمانی</h1>
+<p>برای دانلود فرم‌ها و فایل‌های اطلاعات سازمانی، روی یکی از گزینه‌ها کلیک کنید.</p>
+
+<div class="grid-container">
+    {% for file in files %}
+    <div class="grid-item">
+        <h3>{{ file.title }}</h3>
+        <p>{{ file.description }}</p>
+        <a href="{{ file.file.url }}" class="btn btn-primary" download>دانلود فایل {{ file.file_type }}</a>
+    </div>
+    {% empty %}
+    <p>هیچ فایل اطلاعات سازمانی موجود نیست.</p>
+    {% endfor %}
+</div>
+
+<style>
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.grid-item {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.grid-item h3 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.grid-item p {
+    margin-bottom: 15px;
+}
+
+.grid-item .btn {
+    font-size: 1em;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+</style>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+
+{% block title %}پروژه‌ها{% endblock %}
+
+{% block extra_css %}
+<!-- Link to the external CSS file for Projects -->
+<link rel="stylesheet" href="{% static 'css/style_projects.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1 class="projects-title">پروژه‌ها</h1>
+
+<!-- Divisions Grid -->
+<div class="projects-grid">
+    {% for division in divisions %}
+    <div class="project-card">
+        <h3>{{ division.name }}</h3>
+        <a href="{% url 'division_projects' division.id %}" class="view-projects">نمایش پروژه‌ها</a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    console.log("Projects page loaded successfully.");
+</script>
+{% endblock %}

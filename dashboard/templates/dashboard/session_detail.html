@@ -1,0 +1,21 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}جزئیات جلسه - {{ session.title }}{% endblock %}
+
+{% block content %}
+<h1>{{ session.title }}</h1>
+
+{% if session.content_text %}
+  <p>{{ session.content_text }}</p>
+{% endif %}
+
+{% if session.content_image %}
+  <img src="{{ session.content_image.url }}" alt="Image for {{ session.title }}">
+{% endif %}
+
+{% if session.content_video %}
+  <video controls>
+    <source src="{{ session.content_video.url }}" type="video/mp4">
+    مرورگر شما از پخش ویدئو پشتیبانی نمی‌کند.
+  </video>
+{% endif %}
+{% endblock %}

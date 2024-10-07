@@ -1,0 +1,351 @@
+<!-- dashboard/templates/dashboard/home.html -->
+
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}منابع انسانی - داشبورد مدیریت{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">منابع انسانی</h1>
+    
+    <div class="row">
+        <!-- Total Employees -->
+        <div class="col-md-4 mb-4">
+            <div class="card text-white bg-primary shadow h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="me-auto">
+                            <div class="card-title">تعداد کل کارمندان</div>
+                            <div class="card-text display-4">{{ total_employees|intcomma }}</div>
+                        </div>
+                        <div>
+                            <i class="fa fa-users fa-3x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Total Hired -->
+        <div class="col-md-4 mb-4">
+            <div class="card text-white bg-success shadow h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="me-auto">
+                            <div class="card-title">تعداد کل استخدام‌شده‌ها</div>
+                            <div class="card-text display-4">{{ total_hired|intcomma }}</div>
+                        </div>
+                        <div>
+                            <i class="fa fa-user-plus fa-3x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Total Left -->
+        <div class="col-md-4 mb-4">
+            <div class="card text-white bg-danger shadow h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="me-auto">
+                            <div class="card-title">تعداد کل ترک‌کار‌ها</div>
+                            <div class="card-text display-4">{{ total_left|intcomma }}</div>
+                        </div>
+                        <div>
+                            <i class="fa fa-user-minus fa-3x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Retention and Leave Rates -->
+    <div class="row">
+        <!-- Retention Rate -->
+        <div class="col-md-6 mb-4">
+            <div class="card bg-dark shadow h-100">
+                <div class="card-body">
+                    <h5 class="card-title">نرخ نگهداری</h5>
+                    <p class="card-text display-4">{{ retention_rate|floatformat:2 }}%</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Leave Rate -->
+        <div class="col-md-6 mb-4">
+            <div class="card bg-dark shadow h-100">
+                <div class="card-body">
+                    <h5 class="card-title">نرخ ترک‌کار</h5>
+                    <p class="card-text display-4">{{ leave_rate|floatformat:2 }}%</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Charts -->
+    <div class="row">
+        <!-- Education Levels Distribution Chart -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header">توزیع سطوح تحصیلات</div>
+                <div class="card-body">
+                    <canvas id="educationChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Employees per Department Chart -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header">تعداد کارمندان در هر دپارتمان</div>
+                <div class="card-body">
+                    <canvas id="departmentChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Gender Diversity Chart -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header">تنوع جنسیتی</div>
+                <div class="card-body">
+                    <canvas id="genderChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Age Distribution Chart -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header">توزیع سنی</div>
+                <div class="card-body">
+                    <canvas id="ageDistributionChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Position Distribution Chart -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header">توزیع موقعیت‌ها</div>
+                <div class="card-body">
+                    <canvas id="positionChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Temporary Debugging Data -->
+  
+{% endblock %}
+
+{% block extra_scripts %}
+<!-- Include the json_script tags -->
+{{ education_distribution|json_script:"education-distribution-data" }}
+{{ employees_per_department|json_script:"employees-per-department-data" }}
+{{ gender_distribution|json_script:"gender-distribution-data" }}
+{{ age_distribution|json_script:"age-distribution-data" }}
+{{ position_distribution|json_script:"position-distribution-data" }}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Education Distribution Chart
+        var educationData = JSON.parse(document.getElementById('education-distribution-data').textContent);
+        var educationLabels = educationData.map(item => item.education_level__level);
+        var educationCounts = educationData.map(item => Number(item.count));
+        console.log('Education Distribution Data:', educationData);
+
+        var ctxEducation = document.getElementById('educationChart').getContext('2d');
+        var educationChart = new Chart(ctxEducation, {
+            type: 'doughnut',
+            data: {
+                labels: educationLabels,
+                datasets: [{
+                    data: educationCounts,
+                    backgroundColor: ['#ff6384', '#36a2eb', '#cc65fe', '#ffce56', '#4bc0c0'],
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: {
+                                family: 'Vazir',
+                                size: 14,
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Employees per Department Chart
+        var departmentData = JSON.parse(document.getElementById('employees-per-department-data').textContent);
+        var departmentLabels = departmentData.map(item => item.department__name);
+        var departmentCounts = departmentData.map(item => Number(item.count));
+        console.log('Employees per Department Data:', departmentData);
+
+        var ctxDepartment = document.getElementById('departmentChart').getContext('2d');
+        var departmentChart = new Chart(ctxDepartment, {
+            type: 'bar',
+            data: {
+                labels: departmentLabels,
+                datasets: [{
+                    label: 'تعداد کارمندان',
+                    data: departmentCounts,
+                    backgroundColor: '#36a2eb'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return value.toLocaleString();
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+
+        // Gender Diversity Chart
+        var genderData = JSON.parse(document.getElementById('gender-distribution-data').textContent);
+        var genderLabels = genderData.map(item => item.gender);
+        var genderCounts = genderData.map(item => Number(item.count));
+        console.log('Gender Distribution Data:', genderData);
+
+        var ctxGender = document.getElementById('genderChart').getContext('2d');
+        var genderChart = new Chart(ctxGender, {
+            type: 'pie',
+            data: {
+                labels: genderLabels,
+                datasets: [{
+                    data: genderCounts,
+                    backgroundColor: ['#ff6384', '#36a2eb', '#cc65fe', '#ffce56'],
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: {
+                                family: 'Vazir',
+                                size: 14,
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Age Distribution Chart
+        var ageData = JSON.parse(document.getElementById('age-distribution-data').textContent);
+        var ageLabels = ageData.map(item => item.age_range);
+        var maleCounts = ageData.map(item => Number(item.male));
+        var femaleCounts = ageData.map(item => Number(item.female));
+        console.log('Age Distribution Data:', ageData);
+
+        var ctxAge = document.getElementById('ageDistributionChart').getContext('2d');
+        var ageDistributionChart = new Chart(ctxAge, {
+            type: 'bar',
+            data: {
+                labels: ageLabels,
+                datasets: [
+                    {
+                        label: 'مردان',
+                        data: maleCounts,
+                        backgroundColor: '#36a2eb'
+                    },
+                    {
+                        label: 'بانوان',
+                        data: femaleCounts,
+                        backgroundColor: '#ff6384'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        stacked: true
+                    },
+                    y: {
+                        stacked: true,
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return value.toLocaleString();
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: {
+                                family: 'Vazir',
+                                size: 14,
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Position Distribution Chart
+        var positionData = JSON.parse(document.getElementById('position-distribution-data').textContent);
+        var positionLabels = positionData.map(item => item.position__level);
+        var positionCounts = positionData.map(item => Number(item.count));
+        console.log('Position Distribution Data:', positionData);
+
+        var ctxPosition = document.getElementById('positionChart').getContext('2d');
+        var positionChart = new Chart(ctxPosition, {
+            type: 'horizontalBar',
+            data: {
+                labels: positionLabels,
+                datasets: [{
+                    label: 'تعداد کارمندان',
+                    data: positionCounts,
+                    backgroundColor: '#4bc0c0'
+                }]
+            },
+            options: {
+                responsive: true,
+                indexAxis: 'y', // Horizontal bar chart
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return value.toLocaleString();
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

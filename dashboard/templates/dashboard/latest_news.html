@@ -1,0 +1,40 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+
+{% block title %}آخرین اخبار{% endblock %}
+
+{% block extra_css %}
+<!-- Link to the external CSS file for Latest News -->
+<link rel="stylesheet" href="{% static 'css/style_latest_news.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1 class="news-title">آخرین اخبار</h1>
+
+<!-- News Grid -->
+<div class="news-grid">
+    {% for news in news_list %}
+    <div class="news-card">
+        {% if news.image %}
+        <img src="{{ news.image.url }}" alt="{{ news.title }}">
+        {% endif %}
+        <div class="news-content">
+            <h2>{{ news.title }}</h2>
+            <p class="date">{{ news.publication_date }}</p>
+            <p class="summary">{{ news.summary }}</p>
+            {% if news.link %}
+            <a href="{{ news.link }}" target="_blank" class="read-more">بیشتر بخوانید</a>
+            {% endif %}
+        </div>
+    </div>
+    {% empty %}
+    <p class="empty-message">هیچ خبری موجود نیست.</p>
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    console.log("Latest News page loaded successfully.");
+</script>
+{% endblock %}

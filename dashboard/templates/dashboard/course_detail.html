@@ -1,0 +1,17 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}جزئیات دوره - {{ course.title }}{% endblock %}
+
+{% block content %}
+<h1>{{ course.title }}</h1>
+<p>{{ course.description }}</p>
+<h3>جلسات آموزشی</h3>
+<ul>
+  {% for session in sessions %}
+    <li>
+      <a href="{% url 'session_detail' session.id %}">{{ session.title }}</a>
+    </li>
+  {% empty %}
+    <p>هیچ جلسه‌ای برای این دوره وجود ندارد.</p>
+  {% endfor %}
+</ul>
+{% endblock %}

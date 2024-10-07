@@ -1,0 +1,186 @@
+/* General Container Styles */
+.container {
+    margin-top: 30px;
+    padding: 20px;
+    
+}
+
+/* General Card Styles */
+.card {
+    background-color: #0f011e;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    padding: 20px;
+    margin-bottom: 5px;
+    padding-top: 50px;
+}
+
+.card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Styling for Department and Project Titles */
+h1 {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    color: #333;
+    font-family:iransansWeb;
+}
+
+h5.card-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: #007bff;
+    margin-bottom: 10px;
+    font-family:iransansWeb;
+
+}
+
+
+h6 {
+    font-size: 18px;
+    font-weight: 500;
+    margin-top: 20px;
+    font-family:iransansWeb;
+
+}
+
+/* Project Card Text */
+.card-text {
+    font-size: 16px;
+    color: #0e0101;
+    margin-bottom: 10px;
+    font-family:iransansWeb;
+
+}
+
+/* Task List Group */
+.list-group {
+    margin-top: 10px;
+    font-size: 16px;
+    font-family:iransansWeb;
+
+}
+
+.list-group-item {
+    background-color: #28034a;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 8px;
+    padding: 10px;
+}
+
+.list-group-item strong {
+    font-weight: 600;
+    font-family:iransansWeb;
+
+}
+
+/* Task Item - Aligning Task Name with Progress and Responsible */
+.list-group-item .d-flex {
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Task Progress and Responsible Person Information */
+.list-group-item span {
+    font-size: 14px;
+    color: #ff00c8;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    font-family:iransansWeb;
+
+}
+
+.list-group-item span strong {
+    color: #d0ff00;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .list-group-item span {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+}
+
+/* Grid styling for the projects */
+.card {
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+    border: none;
+    font-family:iransansWeb;
+    padding-top: 50px;
+
+
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+/* Task progress bar container */
+.progress {
+    background-color: #5f0303;
+    border-radius: 5px;
+    overflow: hidden;
+    height: 32px; /* Keep the height consistent */
+    margin-top: 5px;
+    width: 150px; /* Ensure the progress bar takes the full width of its container */
+    max-width: 300px; /* Define a fixed maximum width for the progress bar container */
+}
+
+/* Task progress bar */
+.progress-bar {
+    background-color: #019e01;
+    height: 100%;
+    line-height: 26px; /* Ensure text is centered vertically */
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+    color: white;
+    border-radius: 5px;
+    transition: width 0.4s ease; /* Smooth transition for width changes */
+    width: 0%; /* Default width */
+}
+
+/* Enhanced hover effect for progress bar */
+.progress-bar:hover {
+    background-color: #c6e6cd;
+}
+
+/* Add some padding to task details */
+.task-details {
+    padding: 10px 0;
+}
+
+/* Updated grid view for projects */
+@media (min-width: 768px) {
+    .card {
+        margin-bottom: 30px;
+        font-family:iransansWeb;
+
+    }
+
+    .col-lg-4,
+    .col-md-6 {
+        padding-left: 15px;
+        padding-right: 15px;
+        font-family:iransansWeb;
+
+    }
+
+    .mt-4 {
+        font-family: iransansweb;
+             h1,h2,h3 {
+            font-family: iransansweb;
+            color:darkorange
+    }
+
+    }
+}

@@ -1,0 +1,144 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block title %}گزارش جغرافیایی{% endblock %}
+
+{% block content %}
+<div id="map-container"></div>
+<div id="info-panel">
+  <h2>اطلاعات کشور‌ها</h2>
+  <div id="country-info">
+    <p>برای مشاهدۀ اطلاعات، برروی کشور مورد نظر کلیک کنید</p>
+  </div>
+</div>
+
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
+  #country-info{
+    font-family:iransansweb;
+    p {
+      color:black;
+    }
+  }
+  #map-container {
+    width: 100%;
+    height: 80%;
+    background-color: #a6d5ff;
+  }
+  .country {
+    fill: #4CAF50;
+    stroke: #fff;
+    stroke-width: 0.5px;
+    transition: fill 0.3s;
+  }
+  .country:hover {
+    fill: #45a049;
+    cursor: pointer;
+  }
+  #info-panel {
+    position: absolute;
+    top: 80px;
+    right: 80px;
+    width: 300px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+  h2 {
+    margin-top: 0;
+    color: rgb(1,1,1);
+    font-family:iransansweb;
+  }
+  .info-item {
+    margin-bottom: 10px;
+    color:rgb(1,1,1);
+  }
+  .info-label {
+    font-weight: bold;
+    color: rgb(1,1,1);
+  }
+</style>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://d3js.org/topojson.v3.min.js"></script>
+<script>
+  // Wait for the DOM to fully load before accessing the JSON data
+  document.addEventListener("DOMContentLoaded", function() {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+    const svg = d3.select("#map-container")
+      .append("svg")
+      .attr("width", width)
+      .attr("height", height);
+
+    const projection = d3.geoNaturalEarth1()
+      .scale(width / 2 / Math.PI)
+      .translate([width / 2, height / 2]);
+
+    const path = d3.geoPath().projection(projection);
+
+    // Load world map data
+    d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json").then(function(world) {
+      const countries = topojson.feature(world, world.objects.countries);
+
+      svg.selectAll("path")
+        .data(countries.features)
+        .enter().append("path")
+        .attr("d", path)
+        .attr("class", "country")
+        .on("click", showCountryInfo);
+    });
+
+    // Fetch the country data that is passed through Django template
+    const countryDataMap = JSON.parse(document.getElementById("country-data").textContent);
+
+    function showCountryInfo(event, d) {
+      const countryName = d.properties.name;
+      const countryData = countryDataMap[countryName];
+
+      if (!countryData) {
+        document.getElementById("country-info").innerHTML = `<p>برای این کشور اطلاعاتی در دسترس نیست  ${countryName}</p>`;
+        return;
+      }
+
+      const infoHTML = `
+        <div class="info-item"><span class="info-label">نام کشور:</span> ${countryData.name}</div>
+        <div class="info-item"><span class="info-label">جمعیت:</span> ${parseInt(countryData.population).toLocaleString()}</div>
+        <div class="info-item"><span class="info-label">تولید ناخالص داخلی:</span> $${parseFloat(countryData.gdp).toLocaleString()}</div>
+        <div class="info-item"><span class="info-label">رشد سالانۀ تولید ناخالص:</span> ${parseFloat(countryData.annual_gdp_growth)}%</div>
+        <div class="info-item"><span class="info-label">امید به زندگی:</span> ${parseFloat(countryData.life_expectancy)} سال</div>
+        ${countryData.report_pdf ? 
+            `<div class="info-item"><a href="${countryData.report_pdf}" target="_blank">دانلود گزارش جامع</a></div>` : 
+            `<div class="info-item"><span class="info-label">گزارش:</span> گزارش موجود نیست</div>`
+        }
+      `;
+
+      document.getElementById("country-info").innerHTML = infoHTML;
+    }
+
+    // Handle window resizing for responsive map
+    window.addEventListener('resize', function() {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+
+      svg.attr("width", width).attr("height", height);
+      projection.scale(width / 2 / Math.PI).translate([width / 2, height / 2]);
+
+      svg.selectAll("path").attr("d", path);
+    });
+  });
+</script>
+{% endblock %}
+
+{% block extra_scripts %}
+    <!-- Pass the country data from the Django model as JSON -->
+    {{ countries|json_script:"country-data" }}
+{% endblock %}

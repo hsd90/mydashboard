@@ -1,0 +1,504 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block title %} روند قیمت - داشبورد مدیریت{% endblock %}
+
+{% block content %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تاریخچۀ قیمتی مواد اولیه</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@1.0.1/dist/chartjs-adapter-moment.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0px;
+            background: linear-gradient(135deg, #1a1a1a, #2c2c2c);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: rgba(30, 30, 30, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        h1, h2, h3 {
+            text-align: center;
+            color: #ffffff;
+        }
+        h1 {
+            font-size: 2.8em;
+            background: linear-gradient(135deg, #4CAF50, #2196F3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 40px;
+        }
+        .charts-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+        }
+        .chart-container {
+            position: relative;
+            height: 400px;
+            width: 48%;
+            margin-bottom: 20px;
+            background-color: #2c2c2c;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            background-color: rgba(51, 51, 51, 0.5);
+            padding: 20px;
+            border-radius: 15px;
+        }
+        .tab-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            background-color: rgba(51, 51, 51, 0.5);
+            padding: 10px;
+            border-radius: 30px;
+        }
+        .tab {
+            padding: 12px 24px;
+            font-size: 16px;
+            background-color: #333333;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 25px;
+            margin: 0 5px;
+            color: #e0e0e0;
+        }
+        .tab:hover {
+            transform: translateY(-2px);
+        }
+        .tab.active {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+        }
+        select, button {
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 25px;
+            border: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            background-color: #333333;
+            color: #e0e0e0;
+        }
+        select {
+            appearance: none;
+            background: #333333 url('data:image/svg+xml;utf8,<svg fill="%23e0e0e0" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>') no-repeat right 10px center;
+            padding-right: 40px;
+        }
+        button {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+            transform: translateY(-2px);
+        }
+        .forecast-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+        }
+        .forecast-button {
+            width: 48%;
+            padding: 12px 24px;
+            font-size: 16px;
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .forecast-button:hover {
+            box-shadow: 0 4px 10px rgba(33, 150, 243, 0.3);
+            transform: translateY(-2px);
+        }
+        #stats {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: rgba(44, 44, 44, 0.8);
+            backdrop-filter: blur(5px);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            background-color: #2c2c2c;
+            margin: 10% auto;
+            padding: 30px;
+            border: none;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            color: #e0e0e0;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        .close:hover,
+        .close:focus {
+            color: #ffffff;
+        }
+        .forecast-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .forecast-tab {
+            padding: 12px 24px;
+            font-size: 16px;
+            background-color: #333333;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 25px;
+            margin: 0 5px;
+            color: #e0e0e0;
+        }
+        .forecast-tab:hover {
+            background-color: #444444;
+        }
+        .forecast-tab.active {
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            color: white;
+            box-shadow: 0 4px 10px rgba(33, 150, 243, 0.3);
+        }
+        .forecast-content {
+            display: none;
+            background-color: #2c2c2c;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .forecast-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>تاریخچۀ قیمتی مواد اولیه</h1>
+        <div class="tab-container">
+            <button class="tab active" data-symbol="bitcoin">بیتکوین</button>
+            <button class="tab" data-symbol="ethereum">اتریوم</button>
+            <button class="tab" data-symbol="litecoin">لایت‌کوین</button>
+        </div>
+        <div class="controls">
+            <select id="timeRange">
+                <option value="30">سی روز گذشته</option>
+                <option value="90">نود روز گذشته</option>
+                <option value="180">صدوهشتاد روز گذشته</option>
+                <option value="365">یک‌سال گذشته</option>
+            </select>
+            <button id="refreshBtn">به‌روز رسانی</button>
+        </div>
+        <div class="charts-container">
+            <div class="chart-container">
+                <canvas id="priceChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="volumeChart"></canvas>
+            </div>
+        </div>
+        <div class="forecast-buttons">
+            <button class="forecast-button" onclick="openForecastModal('price')">پیش‌بینی روند قیمتی</button>
+            <button class="forecast-button" onclick="openForecastModal('volume')">پیش‌بینی حجم مبادله</button>
+        </div>
+        <div id="stats"></div>
+    </div>
+
+    <div id="forecastModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeForecastModal()">&times;</span>
+            <h2 id="forecastTitle">تحلیل و پیش‌بینی</h2>
+            <div class="forecast-tabs">
+                <button class="forecast-tab active" onclick="showForecastTab('short')">پیش‌بینی کوتاه‌مدت</button>
+                <button class="forecast-tab" onclick="showForecastTab('long')">پیش‌بینی بلندمدت</button>
+            </div>
+            <div id="shortTermForecast" class="forecast-content active"></div>
+            <div id="longTermForecast" class="forecast-content"></div>
+        </div>
+    </div>
+
+    <script>
+        let priceChart, volumeChart;
+        let currentSymbol = 'bitcoin';
+        let currentTimeRange = 30;
+        let historicalData;
+
+        async function fetchHistoricalData(symbol, days) {
+            const response = await fetch(`https://api.coingecko.com/api/v3/coins/${symbol}/market_chart?vs_currency=usd&days=${days}`);
+            const data = await response.json();
+            return data;
+        }
+
+        function createPriceChart(data) {
+            const ctx = document.getElementById('priceChart').getContext('2d');
+            if (priceChart) {
+                priceChart.destroy();
+            }
+            priceChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.prices.map(d => d[0]),
+                    datasets: [{
+                        label: `${currentSymbol.charAt(0).toUpperCase() + currentSymbol.slice(1)} Price (USD)`,
+                        data: data.prices.map(d => ({x: d[0], y: d[1]})),
+                        borderColor: 'rgb(75, 192, 192)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'day'
+                            },
+                            grid: {
+                                display: false,
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#e0e0e0'
+                            }
+                        },
+                        y: {
+                            beginAtZero: false,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#e0e0e0'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                font: {
+                                    family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+                                    size: 14
+                                },
+                                color: '#e0e0e0'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createVolumeChart(data) {
+            const ctx = document.getElementById('volumeChart').getContext('2d');
+            if (volumeChart) {
+                volumeChart.destroy();
+            }
+            volumeChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.total_volumes.map(d => d[0]),
+                    datasets: [{
+                        label: `${currentSymbol.charAt(0).toUpperCase() + currentSymbol.slice(1)} Volume (USD)`,
+                        data: data.total_volumes.map(d => ({x: d[0], y: d[1]})),
+                        backgroundColor: 'rgba(75, 192, 192, 0.6)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'day'
+                            },
+                            grid: {
+                                display: false,
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#e0e0e0'
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#e0e0e0'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                font: {
+                                    family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+                                    size: 14
+                                },
+                                color: '#e0e0e0'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateStatsDisplay(data) {
+            const statsDiv = document.getElementById('stats');
+            const latestPrice = data.prices[data.prices.length - 1][1];
+            const earliestPrice = data.prices[0][1];
+            const priceChange = ((latestPrice - earliestPrice) / earliestPrice) * 100;
+
+            statsDiv.innerHTML = `
+                <h3>${currentSymbol.charAt(0).toUpperCase() + currentSymbol.slice(1)} آمار (گذشته ${currentTimeRange} روز):</h3>
+                <p>قیمت کنونی: $${latestPrice.toFixed(2)}</p>
+                <p>تغییرات قیمت: ${priceChange.toFixed(2)}%</p>
+                <p>بیشترین قیمت: $${Math.max(...data.prices.map(d => d[1])).toFixed(2)}</p>
+                <p>کمترین قیمت: $${Math.min(...data.prices.map(d => d[1])).toFixed(2)}</p>
+                <p>بیشترین حجم: $${Math.max(...data.total_volumes.map(d => d[1])).toFixed(2)}</p>
+            `;
+        }
+
+        function generateForecast(data, type, term) {
+            const values = type === 'price' ? data.prices.map(d => d[1]) : data.total_volumes.map(d => d[1]);
+            const lastValue = values[values.length - 1];
+            
+            const sma = values.slice(-7).reduce((a, b) => a + b, 0) / 7;
+            
+            const k = 2 / (7 + 1);
+            let ema = values[0];
+            for (let i = 1; i < values.length; i++) {
+                ema = values[i] * k + ema * (1 - k);
+            }
+            
+            const forecastValue = (lastValue + sma + ema) / 3;
+            const forecastChange = ((forecastValue - lastValue) / lastValue) * 100;
+            
+            const trend = forecastChange > 0 ? 'صعودی' : 'نزولی';
+            const confidence = Math.abs(forecastChange) < 5 ? 'کم' : (Math.abs(forecastChange) < 10 ? 'متوسط' : 'زیاد');
+            
+            return `
+                <h3>${term === 'short' ? 'تحلیل کوتاه‌مدت' : 'تحلیل بلندمدت'}  ${currentSymbol.charAt(0).toUpperCase() + currentSymbol.slice(1)} ${type === 'price' ? 'قیمت' : 'حجم'}</h3>
+                <p>پیش‌بینی ${type === 'price' ? 'قیمت' : 'حجم مبادله'}: $${forecastValue.toFixed(2)}</p>
+                <p>تغییرات پیش‌بینی‌شده: ${forecastChange.toFixed(2)}%</p>
+                <p>روند: ${trend}</p>
+                <p>سطح اطمینان: ${confidence}</p>
+                
+            `;
+        }
+
+        async function updateCharts() {
+            try {
+                historicalData = await fetchHistoricalData(currentSymbol, currentTimeRange);
+                createPriceChart(historicalData);
+                createVolumeChart(historicalData);
+                updateStatsDisplay(historicalData);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        function openForecastModal(type) {
+            const modal = document.getElementById('forecastModal');
+            const title = document.getElementById('forecastTitle');
+            title.textContent = `تحلیل و پیش‌بینی   ${type === 'price' ? 'قیمت' : 'حجم'}`;
+            modal.style.display = 'block';
+            showForecastTab('short', type);
+        }
+
+        function closeForecastModal() {
+            const modal = document.getElementById('forecastModal');
+            modal.style.display = 'none';
+        }
+
+        function showForecastTab(term, type) {
+            const tabs = document.getElementsByClassName('forecast-tab');
+            for (let tab of tabs) {
+                tab.classList.remove('active');
+            }
+            event.target.classList.add('active');
+
+            const contents = document.getElementsByClassName('forecast-content');
+            for (let content of contents) {
+                content.classList.remove('active');
+            }
+
+            const activeContent = document.getElementById(`${term}TermForecast`);
+            activeContent.classList.add('active');
+
+            if (historicalData) {
+                activeContent.innerHTML = generateForecast(historicalData, type, term);
+            }
+        }
+
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                e.target.classList.add('active');
+                currentSymbol = e.target.dataset.symbol;
+                updateCharts();
+            });
+        });
+
+        document.getElementById('timeRange').addEventListener('change', (e) => {
+            currentTimeRange = e.target.value;
+            updateCharts();
+        });
+
+        document.getElementById('refreshBtn').addEventListener('click', updateCharts);
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('forecastModal');
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        updateCharts();
+    </script>
+</body></html>
+{% endblock %}
+
+

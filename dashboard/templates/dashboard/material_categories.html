@@ -1,0 +1,85 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}مواد{% endblock %}
+{% block content %}
+<h1>دسته‌بندی مورد نظر را انتخاب کنید</h1>
+<div class="category-container">
+    {% for category in categories %}
+    <div class="category-box">
+        <img src="{{ category.icon.url }}" alt="{{ category.name }}" class="category-icon">
+        <h2>{{ category.name }}</h2>
+        <p>{{ category.description }}</p>
+        <a href="{% url 'category_materials' category.id %}" class="view-button">مشاهده</a>
+    </div>
+    {% endfor %}
+</div>
+
+<style>
+    /* Container for all categories */
+    .category-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); /* Always show 3 boxes per row */
+        gap: 30px;
+        margin-top: 20px;
+        padding: 20px;
+    }
+
+    /* Individual category boxes */
+    .category-box {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 30px;
+        text-align: center;
+        transition: box-shadow 0.3s ease, transform 0.3s ease;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        position: relative;
+    }
+
+    /* Add an effect to the box when hovered */
+    .category-box:hover {
+        box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+        transform: translateY(-5px);
+    }
+
+    /* Category icons - fixed size */
+    .category-icon {
+        width: 100px;
+        height: 100px;
+        object-fit: contain;
+        margin-bottom: 15px;
+    }
+
+    /* Category name */
+    .category-box h2 {
+        font-size: 1.4rem;
+        color: #333;
+        margin: 15px 0;
+        font-weight: bold;
+    }
+
+    /* Category description */
+    .category-box p {
+        font-size: 1rem;
+        color: #555;
+        margin-bottom: 20px;
+    }
+
+    /* Stylish view button */
+    .view-button {
+        display: inline-block;
+        padding: 10px 25px;
+        font-size: 1rem;
+        background-color: #007bff;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+    /* Hover effect for the button */
+    .view-button:hover {
+        background-color: #0056b3;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,494 @@
+/* General Styles */
+body {
+    font-family: 'Vazir', sans-serif;
+    background-color: #121212; /* Dark background */
+    color: #e0e0e0; /* Light gray text */
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Navbar Styles */
+.navbar {
+    background-color: #1f1f1f; /* Darker background for navbar */
+    border-bottom: 1px solid #333333;
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    background: rgb(228,12,198);
+    background: linear-gradient(90deg, rgba(228,12,198,1) 0%, rgba(143,36,244,1) 39%, rgba(14,23,23,1) 100%);}
+
+.navbar.scrolled {
+    background-color: #1f1f1f;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.navbar-nav .nav-link {
+    font-size: 1.1em;
+    color: #e0e0e0;
+    transition: color 0.3s;
+    font-family:iransansweb;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #bb86fc; /* Accent color */
+}
+
+.navbar-brand {
+    font-weight: bold;
+    color: #bb86fc;
+    transition: color 0.3s;
+}
+
+.navbar-brand:hover {
+    color: #9b67e5; /* Darker accent on hover */
+}
+
+/* Dropdown Menu Styles */
+.navbar .dropdown-menu {
+    background-color: #1f1f1f;
+    border: none;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+}
+
+.navbar .dropdown-item {
+    color: #e0e0e0;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.navbar .dropdown-item:hover {
+    background-color: #333333;
+    color: #bb86fc;
+}
+
+/* Card Styles */
+.card {
+    margin-bottom: 20px;
+    background-color: #1e1e1e;
+    border: none;
+    border-radius: 15px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card .card-header {
+    background-color: transparent;
+    border-bottom: none;
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: #e0e0e0;
+    transition: color 0.3s;
+}
+
+.card .card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #e0e0e0;
+    transition: color 0.3s;
+  
+    
+}
+
+.card .card-text {
+    font-size: 1rem;
+    color: #b0b0b0;
+    transition: color 0.3s;
+}
+
+.card .fa-3x {
+    color: #333333;
+    opacity: 0.5;
+    transition: color 0.3s, opacity 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+}
+
+.card:hover .card-header,
+.card:hover .card-title {
+    color: #bb86fc;
+}
+
+.card:hover .fa-3x {
+    color: #bb86fc;
+    opacity: 0.7;
+}
+
+/* Button Styles */
+.btn-custom {
+    background-color: #bb86fc;
+    color: #ffffff;
+    border-radius: 50px;
+    padding: 10px 20px;
+    transition: background-color 0.3s;
+}
+
+.btn-custom:hover {
+    background-color: #9b67e5;
+}
+
+/* Sidebar Styles (if using a sidebar) */
+#sidebar-wrapper {
+    width: 250px;
+    background-color: #1f1f1f;
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100%;
+    overflow-y: auto;
+    transition: all 0.3s;
+    z-index: 1040;
+}
+
+#sidebar-wrapper .sidebar-heading {
+    padding: 1rem;
+    font-size: 1.5rem;
+    color: #bb86fc;
+    text-align: center;
+}
+
+#sidebar-wrapper .list-group {
+    width: 100%;
+}
+
+#sidebar-wrapper .list-group-item {
+    border: none;
+    padding: 15px 20px;
+    background-color: #1f1f1f;
+    color: #e0e0e0;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#sidebar-wrapper .list-group-item:hover {
+    background-color: #333333;
+    color: #bb86fc;
+}
+
+#sidebar-wrapper .list-group-item.active {
+    background-color: #bb86fc;
+    color: #1f1f1f;
+}
+
+#page-content-wrapper {
+    width: 100%;
+    transition: all 0.3s;
+    padding: 20px;
+}
+
+#menu-toggle {
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #e0e0e0;
+    transition: color 0.3s;
+}
+
+#menu-toggle:hover {
+    color: #bb86fc;
+}
+
+/* Footer Styles */
+footer {
+    background: rgb(228,12,198);
+    background: linear-gradient(90deg, rgb(32, 1, 27) 0%, rgb(48, 2, 91) 39%, rgba(14,23,23,1) 100%);
+    border-top: 1px solid #333333;
+    text-align: center;
+    /* Removed position: fixed; bottom:0; width:100%; z-index:1030; */
+    /* Adjusted padding to reduce size */
+    font-size: 0.9rem; /* Reduced font size */
+}
+
+footer a {
+    color: #bb86fc;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+footer a:hover {
+    color: #9b67e5;
+}
+
+/* Table Styles */
+.table-hover tbody tr:hover {
+    background-color: #2a2a2a;
+}
+
+.table thead th {
+    border-bottom: 2px solid #333333;
+    color: #e0e0e0;
+}
+
+.table td, .table th {
+    vertical-align: middle;
+    border-top: 1px solid #333333;
+}
+
+/* Form Styles */
+.form-control {
+    background-color: #2a2a2a;
+    color: #e0e0e0;
+    border: 1px solid #333333;
+    border-radius: 0.25rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-control:focus {
+    background-color: #2a2a2a;
+    color: #e0e0e0;
+    border-color: #bb86fc;
+    box-shadow: 0 0 0 0.2rem rgba(187,134,252,0.25);
+}
+
+/* Chart Styles */
+.canvas-container {
+    position: relative;
+    height: 400px;
+}
+
+/* Tooltip Styles */
+.tooltip-inner {
+    background-color: #333333;
+    color: #e0e0e0;
+}
+
+.tooltip.bs-tooltip-top .arrow::before {
+    border-top-color: #333333;
+}
+
+/* Custom Scrollbar */
+body::-webkit-scrollbar {
+    width: 8px;
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: #555555;
+    border-radius: 4px;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+    background-color: #777777;
+}
+
+/* Animation for Buttons */
+.btn {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%) scale(0);
+    top: 50%;
+    transform: translateY(-50%) scale(0);
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255,255,255,0.1);
+    border-radius: 50%;
+    transition: transform 0.5s;
+}
+
+.btn:active::after {
+    transform: translate(-50%, -50%) scale(1);
+    transition: transform 0s;
+}
+
+/* Hover Effects for Cards */
+.card:hover .card-title, .card:hover .card-text {
+    color: #bb86fc;
+}
+
+/* Interactive Menu Items */
+.navbar-nav .nav-item {
+    position: relative;
+}
+
+.navbar-nav .nav-item::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    width: 0%;
+    height: 2px;
+    background-color: #bb86fc;
+    transition: width 0.3s ease-in-out, left 0.3s ease-in-out;
+}
+
+.navbar-nav .nav-item:hover::after {
+    width: 100%;
+    left: 0;
+}
+
+/* Box Title Interactive Effect */
+.card .card-header {
+    position: relative;
+    overflow: hidden;
+}
+
+.card .card-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: -100%;
+    width: 100%;
+    height: 2px;
+    background-color: #bb86fc;
+    transition: left 0.3s ease-in-out;
+}
+
+.card:hover .card-header::after {
+    left: 0;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .card .fa-3x {
+        display: none;
+    }
+
+    #sidebar-wrapper {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+
+    #page-content-wrapper {
+        padding: 20px;
+    }
+
+    footer {
+        position: relative;
+    }
+}
+
+/* Additional Custom Styles */
+/* Menu Toggle Button */
+#menu-toggle {
+    margin-left: 15px;
+    cursor: pointer;
+}
+
+/* Navbar Collapse Styles */
+.navbar-collapse {
+    justify-content: flex-end;
+}
+
+/* Active Link Styles */
+.navbar-nav .nav-link.active {
+    color: #bb86fc;
+    font-weight: bold;
+    position: relative;
+    font-family:iransansweb;
+}
+
+.navbar-nav .nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    width: 50%;
+    height: 2px;
+    background-color: #bb86fc;
+    transform: translateX(-50%);
+}
+
+/* Header Styles */
+h1, h2, h3, h4, h5, h6 {
+    color: #e0e0e0;
+    margin-bottom: 20px;
+}
+
+/* Breadcrumb Styles */
+.breadcrumb {
+    background-color: transparent;
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    content: ">";
+    color: #bbbbbb;
+}
+
+/* List Group Styles */
+.list-group-item {
+    border: none;
+    padding: 15px 20px;
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.list-group-item:hover {
+    background-color: #2a2a2a;
+    color: #bb86fc;
+}
+
+.list-group-item .badge {
+    font-size: 0.9rem;
+    background-color: #333333;
+    color: #e0e0e0;
+}
+
+.list-group-item:hover .badge {
+    background-color: #bb86fc;
+    color: #1f1f1f;
+}
+
+/* Chart Card Adjustments */
+.card .card-body {
+    position: relative;
+}
+
+/* Link Styles */
+a {
+    color: #bb86fc;
+    transition: color 0.3s;
+}
+
+a:hover {
+    color: #9b67e5;
+}
+
+/* Modal Styles */
+.modal-content {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    border-radius: 10px;
+}
+
+.modal-header, .modal-footer {
+    border: none;
+}
+
+.modal-header .close {
+    color: #e0e0e0;
+    opacity: 0.7;
+}
+
+.modal-header .close:hover {
+    color: #ffffff;
+    opacity: 1;
+}
+
+/* Input Group Styles */
+.input-group-text {
+    background-color: #2a2a2a;
+    border-right: none;
+    color: #e0e0e0;
+}
+
+.input-group .form-control {
+    background-color: #2a2a2a;
+    color: #e0e0e0;
+    border-left: none;
+    border-color: #333333;
+}
+
+/* Tooltip Initialization */
+[data-toggle="tooltip"] {
+    cursor: pointer;
+}
+
+/* Additional Custom Styles */
+/* Add any additional styles below */

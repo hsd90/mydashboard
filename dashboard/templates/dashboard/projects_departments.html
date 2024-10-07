@@ -1,0 +1,38 @@
+{% extends 'dashboard/base.html' %}
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/projects.css' %}">
+
+{% block content %}
+<div class="container">
+    <h1 class="mt-4">بخش‌ها</h1>
+    <div class="row">
+        {% for department in departments %}
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <a href="{% url 'department_projects' department.id %}">
+                        <h5 class="card-title">{{ department.name }}</h5>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+   .mt-4 {
+        font-family: iransansweb;
+             h1,h2,h3 {
+            font-family: iransansweb;
+            color:darkorange
+    }
+
+    }
+
+    .card-body text-center {
+        font-family: iransansweb;
+        font-style:normal;    }
+</style>
+{% endblock %}

@@ -1,0 +1,58 @@
+/* Grid for displaying 12 months */
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);  /* 4 columns */
+    gap: 30px;
+    padding: 20px;
+}
+
+/* Style for each month box */
+.month-box {
+    background-color: #0ed8e7;
+    border: 2px solid #4CAF50;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+.month-box:hover {
+    transform: translateY(-5px);
+}
+
+/* Month heading */
+.month-box h3 {
+    color: #4CAF50;
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+}
+
+/* List of events */
+.month-box ul {
+    list-style: none;
+    padding: 0;
+    color: #555;
+    font-size: 1rem;
+}
+
+/* Style for each event item */
+.month-box li {
+    margin-bottom: 15px;
+    font-size: 1rem;
+}
+
+.month-box li strong {
+    font-size: 1.2rem;
+}
+
+.month-box li span {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.month-box li.empty {
+    color: #888;
+    font-size: 1.1rem;
+}

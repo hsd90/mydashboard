@@ -1,0 +1,113 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}آمار بازاریابی{% endblock %}
+
+{% block content %}
+
+<h1>آمار بازاریابی</h1>
+<p>لطفاً یکی از گزینه‌های زیر را انتخاب کنید</p>
+
+<div class="grid-container">
+  <div class="grid-item">
+    <a href="{% url 'training_courses' %}">
+      <div class="box">
+        <i class="fas fa-chalkboard-teacher"></i>
+        <h3>آموزش</h3>
+      </div>
+    </a>
+  </div>
+
+  <div class="grid-item">
+    <a href="{% url 'organizational_info' %}">
+      <div class="box">
+        <i class="fas fa-book"></i>
+        <h3>اطلاعات و فرم‌ها</h3>
+      </div>
+    </a>
+  </div>
+
+  <div class="grid-item">
+    <a href="{% url 'exhibition_calendar' %}">
+      <div class="box">
+        <i class="fas fa-calendar-alt"></i>
+        <h3>تقویم نمایشگاهی</h3>
+      </div>
+    </a>
+  </div>
+
+  <div class="grid-item">
+    <a href="{% url 'latest_news' %}">
+      <div class="box">
+        <i class="fas fa-newspaper"></i>
+        <h3>آخرین اخبار</h3>
+      </div>
+    </a>
+  </div>
+
+  <div class="grid-item">
+    <a href="{% url 'latest_analyses' %}">
+      <div class="box">
+        <i class="fas fa-chart-line"></i>
+        <h3>آخرین تحلیل‌ها</h3>
+      </div>
+    </a>
+  </div>
+
+  <div class="grid-item">
+    <a href="{% url 'reports' %}">
+      <div class="box">
+        <i class="fas fa-file-alt"></i>
+        <h3>گزارش‌ها</h3>
+      </div>
+    </a>
+  </div>
+</div>
+
+<style>
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 20px;
+    margin-top: 30px;
+  }
+
+  .grid-item {
+    text-align: center;
+  }
+
+  .box {
+    background-color: #f9f9f9;
+    padding: 40px 20px;
+    border-radius: 15px;
+
+    height: 12em;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    text-align: center;
+    background: rgb(211,238,212);
+    background: linear-gradient(90deg, rgba(211,238,212,1) 0%, rgba(183,227,222,1) 100%);
+
+  }
+
+  .box:hover {
+    transform: translateY(-10px);
+    background-color: #e2e6e8;
+  }
+
+  .box i {
+    font-size: 40px;
+    margin-bottom: 10px;
+    color: #007bff;
+  }
+
+  .box h3 {
+    font-size: 22px;
+    color: #333;
+    font-family: iransansweb;
+  }
+
+  a {
+    text-decoration: none;
+  }
+</style>
+
+{% endblock %}

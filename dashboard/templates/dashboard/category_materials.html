@@ -1,0 +1,72 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}مواد مربوط به {{ category.name }}{% endblock %}
+{% block content %}
+<h1>مواد مربوط به {{ category.name }}</h1>
+
+<div class="materials-container">
+    {% for material in materials %}
+    <div class="material-box">
+        <h2>{{ material.name }}</h2>
+        <p>{{ material.description }}</p>
+        <a href="{% url 'material_detail' material.id %}" class="view-button">جزئیات</a>
+    </div>
+    {% endfor %}
+</div>
+
+<style>
+    /* Container for all materials */
+    .materials-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); /* 3 materials per row */
+        gap: 30px;
+        margin-top: 20px;
+        padding: 20px;
+    }
+
+    /* Individual material boxes */
+    .material-box {
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        text-align: center;
+        transition: box-shadow 0.3s ease, transform 0.3s ease;
+    }
+
+    /* Material box hover effect */
+    .material-box:hover {
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        transform: translateY(-5px);
+    }
+
+    /* Material name */
+    .material-box h2 {
+        font-size: 1.3rem;
+        color: #333;
+    }
+
+    /* Material description */
+    .material-box p {
+        font-size: 1rem;
+        color: #666;
+    }
+
+    /* View button for material */
+    .view-button {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 1rem;
+        background-color: #28a745;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 4px;
+        margin-top: 15px;
+        transition: background-color 0.3s ease;
+    }
+
+    /* View button hover effect */
+    .view-button:hover {
+        background-color: #218838;
+    }
+</style>
+{% endblock %}
